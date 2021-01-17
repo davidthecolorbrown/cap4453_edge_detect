@@ -10,6 +10,9 @@ $ ./sobel.c input_img.pgm output_img.pgm threshold
 
 // sobel.c with low/high threshold
 $ ./sobel.c input_img.pgm output_img.pgm low_threshold high_threshold
+
+//sobel.c with three outputs + low/high threshold
+$ ./sobel.c input_img.pgm mag_out.pgm low_out.pgm hi_out.pgm low_threshold high_threshold
 */
 
 #include <stdio.h>                          
@@ -24,9 +27,9 @@ int masky[3][3] = {{1,2,1},{0,0,0},{-1,-2,-1}}; // sobel algorithm mask for y di
 double ival[256][256],maxival;
 
 // main method taking command-line args
-main(argc,argv)
-int argc;
-char **argv;
+main(int argc, char **argv)
+// int argc;
+// char **argv;
 {
         // initialize variables, pointers
         int i,j,p,q,mr,sum1,sum2;
@@ -64,7 +67,7 @@ char **argv;
         // hi_threshold = atoi(foobar); // convert to float, windows
 
         // print out .pgm header at top of file so image can be viewed in .pgm viewer
-        //fprint(fo1, "P5\n256 256\n255\n");
+        fprintf(fo1, "P5\n256 256\n255\n");
 
         // read in file
         // loop through image rows

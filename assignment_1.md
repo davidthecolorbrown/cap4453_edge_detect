@@ -58,10 +58,14 @@
 
 
 command-line arg:
-$ # sobel.c with single threshold
-$ ./sobel.c input_img.pgm output_img.pgm threshold
-$ # sobel.c with low/high threshold
-$ ./sobel.c input_img.pgm output_img.pgm low_threshold high_threshold
+# sobel.c with single threshold
+./sobel.c input_img.pgm output_img.pgm threshold
+# sobel.c with low/high threshold
+./sobel.c input_img.pgm output_img.pgm low_threshold high_threshold
+# sobel.c with three outputs + low/high threshold
+./sobel.c input_img.pgm mag_out.pgm low_out.pgm hi_out.pgm low_threshold high_threshold
+
+
 
 
 * output file size == 65536 (256x256)  
