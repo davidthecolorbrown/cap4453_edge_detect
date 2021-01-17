@@ -1,18 +1,19 @@
 /* 
+David Brown
+CAP4453 
+Spring 2021
+Assignment 1
+
 Sobel.c 
 
 compile:
 $ gcc sobel.c -o sobel
 
 command-line arg:
-// sobel.c with single threshold
-$ ./sobel.c input_img.pgm output_img.pgm threshold
-
-// sobel.c with low/high threshold
-$ ./sobel.c input_img.pgm output_img.pgm low_threshold high_threshold
-
-//sobel.c with three outputs + low/high threshold
-$ ./sobel.c input_img.pgm mag_out.pgm low_out.pgm hi_out.pgm low_threshold high_threshold
+// output for face05.pgm
+$ ./sobel face05.pgm sobelmag.pgm sobelout1.pgm sobelout2.pgm 40 110
+// output for garb34.pgm
+$ ./sobel garb34.pgm sobel_out.pgm sobel_low.pgm sobel_hi.pgm 40 110
 */
 
 #include <stdio.h>                          
@@ -28,14 +29,11 @@ double ival[256][256],maxival;
 
 // main method taking command-line args
 main(int argc, char **argv)
-// int argc;
-// char **argv;
 {
         // initialize variables, pointers
         int i,j,p,q,mr,sum1,sum2;
-        double low_threshold, hi_threshold;
-        double threshold;
-        FILE *fo1, *fo2, *fp1, *fopen();
+        int low_threshold, hi_threshold;
+        FILE *fo1, *fo2, *fo3, *fp1, *fopen();
         char *foobar;
 
         // read in input image 
@@ -43,31 +41,37 @@ main(int argc, char **argv)
         foobar = *argv;
         fp1=fopen(foobar,"rb");
 
-        // generate output image
+        // generate output image for total magnitude
 	argc--; argv++;
 	foobar = *argv;
 	fo1=fopen(foobar,"wb");
 
-        //  initialize threshold by convert to float
+        // generate output image for low threshold
+	argc--; argv++;
+	foobar = *argv;
+	fo2=fopen(foobar,"wb");
+
+        // generate output image for high threshold
+	argc--; argv++;
+	foobar = *argv;
+	fo3=fopen(foobar,"wb");
+
+        //  initialize low threshold by convert to float
         argc--; argv++;
 	foobar = *argv;
-	//threshold = atof(foobar); // convert to float, linux/mac
-        threshold = atoi(foobar); // convert to float, windows
+	//low_threshold = atof(foobar); // convert to float, linux/mac
+        low_threshold = atoi(foobar); // convert to float, windows
 
-        // //  initialize low threshold by convert to float
-        // argc--; argv++;
-	// foobar = *argv;
-	// //low_threshold = atof(foobar); // convert to float, linux/mac
-        // low_threshold = atoi(foobar); // convert to float, windows
-
-        // //  initialize high threshold by convert to float
-        // argc--; argv++;
-	// foobar = *argv;
-	// //hi_threshold = atof(foobar); // convert to float, linux/mac
-        // hi_threshold = atoi(foobar); // convert to float, windows
-
-        // print out .pgm header at top of file so image can be viewed in .pgm viewer
+        //  initialize high threshold by convert to float
+        argc--; argv++;
+	foobar = *argv;
+	//int hi = atof(foobar); // convert to float, linux/mac
+        hi_threshold = atoi(foobar); // convert to float, windows
+        
+        // save .pgm header at top of file so image can be viewed in .pgm viewer
         fprintf(fo1, "P5\n256 256\n255\n");
+        fprintf(fo2, "P5\n256 256\n255\n");
+        fprintf(fo3, "P5\n256 256\n255\n");
 
         // read in file
         // loop through image rows
@@ -133,7 +137,9 @@ main(int argc, char **argv)
                         
                         // find the max value in gradient array
                         if (ival[i][j] > maxival)
+                        {
                                 maxival = ival[i][j];
+                        }
 
                 }
         }
@@ -149,12 +155,32 @@ main(int argc, char **argv)
                         // re-scale gradient value so it fits between 0-255
                         ival[i][j] = (ival[i][j] / maxival) * 255;   
 
-                        // write lines to file         
+                        // write pixel to magnitude_file         
                         fprintf(fo1,"%c",(char)((int)(ival[i][j])));
 
-                        // write lines to file
-                        //fprintf(fo1, "%c",(char)cdif);
-             
+                        // check if given re-scaled gradient value for current cell is above low threshold
+                        if (ival[i][j]>low_threshold)
+                        {
+                                // edge, write pixel to low threshold as 255       
+                                fprintf(fo2,"%c", (char) 255);
+                        }
+                        else
+                        {
+                                // not edge, write pixel to low threshold file as 0
+                                fprintf(fo2,"%c", (char) 0);
+                        }
+
+                        // check if given re-scaled gradient value for current cell exceeds high threshold
+                        if (ival[i][j]>hi_threshold)
+                        {
+                                // edge, write pixel to high threshold file as 255    
+                                fprintf(fo3,"%c", (char) 255);
+                        }       
+                        else
+                        {
+                                // not edge, write pixel to high threshold file as 0
+                                fprintf(fo3,"%c", (char) 0);
+                        } 
                 }
         }
 

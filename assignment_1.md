@@ -25,22 +25,6 @@
     2) output due to hi threshold (sobelout1.pgm)
     3) output due to low threshold (sobelout2.pgm)
 * submit sobel.c code 
-
-## todos
-* [x] download sobel.c
-* [] run sobel.c using "face05.pgm"
-* [] add code to make sobel.c use thresholds (Hi threshold, Lo threshold)
-* [] add three lines of code to generate header for .pgm viewer (http://www.cs.ucf.edu/courses/cap4453/progs/rawtopgm.)
-* [] run new program and make sure it can be viewed in pgm viewer, three outputs;
-    1) magnitude image
-    2) output due to hi threshold
-    3) output due to low threshold
-* [] run on chess image (garb34.pgm) and get three output images which should approximately match output from www.cs.ucf.edu/courses/cap4453/outputpics
-    1) magnitude image (sobelmag.pgm)
-    2) output due to hi threshold (sobelout1.pgm)
-    3) output due to low threshold (sobelout2.pgm)
-* [] submit sobel.c code 
-
 ## random notes i've managed to forget about C
 * command-line args
     * argc: number of args passed
@@ -55,26 +39,18 @@
     # execute
     ./program_name argv[1] argv[2] 
     ```
-
-
-command-line arg:
+* command-line arg for running program:
+```bash
 # sobel.c with single threshold
-./sobel.c input_img.pgm output_img.pgm threshold
+./sobel input_img.pgm output_img.pgm threshold
 # sobel.c with low/high threshold
-./sobel.c input_img.pgm output_img.pgm low_threshold high_threshold
+./sobel input_img.pgm output_img.pgm low_threshold high_threshold
 # sobel.c with three outputs + low/high threshold
-./sobel.c input_img.pgm mag_out.pgm low_out.pgm hi_out.pgm low_threshold high_threshold
+./sobel input_img.pgm mag_out.pgm low_out.pgm hi_out.pgm low_threshold high_threshold
+# output for face05.pgm
+./sobel face05.pgm sobelmag.pgm sobelout1.pgm sobelout2.pgm 40 110
+# output for garb34.pgm
+./sobel garb34.pgm sobel_out.pgm sobel_low.pgm sobel_hi.pgm 40 110
+```
 
-
-
-
-* output file size == 65536 (256x256)  
-
-
-printf("P5\n");
-printf("%d %d\n", rows, cols);  
-printf("255\n");
-edge detection 7 (4~ min) show some results for image processing of chess pieces
-
-mask radius - mr (13:30~min)
-3x3 = 1 
+git push -u origin main
